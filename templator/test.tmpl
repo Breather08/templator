@@ -3,10 +3,14 @@
     <div>
       <h1>{{ val.title }}</h1>
       <p>{{ val.content }}</p>
-      <div>{{ val.options.isActive }}</div>
     </div>
     {{ #rof }}
-  <!-- <div>{{ test.msg }}</div>
-  <div>{{ asd }}</div>
-  <div>{{ qwerty }}</div> -->
+    {{ #if show.test.1.2.3 }}
+    <div>
+      Conditional block
+      <div>{{ test.msg }}</div>
+      <div>{{ asd }}</div>
+      <div>{{ qwerty }}</div>
+    </div>
+    {{ #fi }}
 </div>

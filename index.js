@@ -11,32 +11,41 @@ function init(tmpl) {
         title: "Title1",
         content: "Content1",
         options: {
-          isActive: false
-        }
+          isActive: false,
+        },
       },
       {
         title: "Title2",
         content: "Content2",
         options: {
-          isActive: true
-        }
+          isActive: true,
+        },
       },
       {
         title: "Title3",
         content: "Content3",
         options: {
-          isActive: false
-        }
+          isActive: false,
+        },
       },
     ],
+    show: {
+      test: {
+        1: {
+          2: {
+            3: true,
+          },
+        },
+      },
+    },
     test: {
       msg: "Some message",
     },
     asd: "ASD",
     qwerty: "QWERTY",
   });
-  
-  document.body.innerHTML = compiled
+
+  document.body.innerHTML += compiled;
 }
 
 const xhr = new XMLHttpRequest();
