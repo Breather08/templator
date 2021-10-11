@@ -1,11 +1,9 @@
 <div>
-    {{ #for val in testArray }}
-    <div>
-      <h1>{{ val.title }}</h1>
-      <p>{{ val.content }}</p>
-    </div>
-    {{ #rof }}
-    {{ #if show.test.1.2.3 }}
+  {{ #for val in testArray }}
+  <div>
+    <h1>{{ val.title }}</h1>
+    <p>{{ val.content }}</p>
+    {{ #if val.options.isActive }}
     <div>
       Conditional block
       <div>{{ test.msg }}</div>
@@ -13,4 +11,14 @@
       <div>{{ qwerty }}</div>
     </div>
     {{ #fi }}
+  </div>
+  {{ #rof }}
+  {{ #if show.test.1.2.3 }}
+  <div>
+    Conditional block
+    <div>{{ test.msg }}</div>
+    <div>{{ asd }}</div>
+    <div>{{ qwerty }}</div>
+  </div>
+  {{ #fi }}
 </div>

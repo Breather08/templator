@@ -11,3 +11,7 @@ export const findObjectValue = (objString, data) => {
 };
 
 export const isNumberString = (value) => /^\d+$/.test(value);
+
+export const handleConditionals = (value) => {
+  return value !== "false" && value;
+}

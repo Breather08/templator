@@ -1,42 +1,19 @@
-import { findObjectValue, isNumberString } from "../utils/helpers.js";
+import { isNumberString } from "../utils/helpers.js";
+import {
+  templateVariableReplacer,
+  replaceValuesInSpecials,
+  conditionalsReplacer,
+} from "../utils/replacers.js";
+import {
+  variableRegex,
+  bracketsRegex,
+  specialBracketsRegex,
+  conditionalsRegex,
+  loopRegex,
+  commentsRegex,
+} from "../utils/regExps.js";
 
 export class Templator {
-  _variableRegex = /(?!{{\s*)[a-z0-9.\-_]+(?=\s*}})/gi;
-
-  _bracketsRegex = /(\s*}})|({{\s*)/gi;
-
-  _specialBracketsRegex = /\s*{{\s*#.+/g;
-
-  _conditionalsRegex =
-    /(?<={{\s*#if\s([a-z0-9._]+)\s*}}\s*)(.|\n)+(?=\n?\s*{{\s*#fi\s*}})/gi;
-  // TODO: Remove positive lookbehind (fails on Safari)
-  _loopRegex =
-    /(?<={{\s*#for\s(\w+)\sin\s([a-z0-9._]+)\s*}}\s*)(.|\n)+(?=\n?\s*{{\s*#rof\s*}})/gi;
-
-  _commentsRegex = /<!--(.|\n)*-->/gi;
-
-  _templateVariableReplacer(data) {
-    return (str) => {
-      if (str.includes(".")) {
-        return findObjectValue(str, { ...data });
-      }
-      if (isNumberString(str)) {
-        return str;
-      }
-      return data[str];
-    };
-  }
-
-  _handleConditionals(value) {
-    return value !== "false" && value;
-  }
-
-  _replaceValuesInSpecials(target, data) {
-    return target
-      .replaceAll(this._variableRegex, this._templateVariableReplacer(data))
-      .replaceAll(this._bracketsRegex, "");
-  }
-
   /**
    * Compiles template to a function, which can be rendered
    * multiple times with different data
@@ -48,7 +25,7 @@ export class Templator {
   }
 
   /**
-   * Returns rendered html template with passed locals
+   * Returns rendered html template with passed data
    * @param {string} template
    * @param {Record<string, any>} data
    * @returns {string}
@@ -57,9 +34,9 @@ export class Templator {
     return (
       template
         // Remove all comments
-        .replaceAll(this._commentsRegex, "")
+        .replace(commentsRegex, "")
         // Generate loop items
-        .replaceAll(this._loopRegex, (target, iterable, rangeValue) => {
+        .replace(loopRegex, (target, iterable, rangeValue) => {
           let rangeString = "";
           let range = isNumberString(rangeValue)
             ? [...new Array(Number(rangeValue))].map((_, i) => i)
@@ -68,27 +45,21 @@ export class Templator {
           const obj = {};
           range.forEach((item) => {
             obj[iterable] = item;
-            rangeString += `${this._replaceValuesInSpecials(target, obj)}\n`;
+            const block = target
+              .replace(conditionalsRegex, conditionalsReplacer(data))
+              .replace(specialBracketsRegex, "");
+            rangeString += `${replaceValuesInSpecials(block, obj)}\n`;
           });
           return rangeString;
         })
         // Handle conditionals
-        .replaceAll(this._conditionalsRegex, (target, value) => {
-          value = findObjectValue(value, data)
-          if (value === "true")
-            return this._replaceValuesInSpecials(target, data);
-          if (value === "false") return "";
-
-          return !findObjectValue(value, data)
-            ? ""
-            : this._replaceValuesInSpecials(target, data);
-        })
+        .replace(conditionalsRegex, conditionalsReplacer(data))
         // Remove all special brackets
-        .replaceAll(this._specialBracketsRegex, "")
+        .replace(specialBracketsRegex, "")
         // Replace all variables
-        .replaceAll(this._variableRegex, this._templateVariableReplacer(data))
+        .replace(variableRegex, templateVariableReplacer(data))
         // Remove all brackets
-        .replaceAll(this._bracketsRegex, "")
+        .replace(bracketsRegex, "")
     );
   }
 }
