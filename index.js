@@ -25,7 +25,7 @@ function init(tmpl) {
         title: "Title3",
         content: "Content3",
         options: {
-          isActive: false,
+          isActive: true,
         },
       },
     ],
@@ -49,11 +49,12 @@ function init(tmpl) {
 }
 
 const xhr = new XMLHttpRequest();
-xhr.open("GET", "./templator/test.tmpl", true);
+xhr.open("GET", "./test.tmpl", true);
 xhr.onreadystatechange = function () {
   if (this.readyState !== 4) return;
   if (this.status !== 200) return;
 
+  
   init(this.responseText);
 };
 xhr.send();

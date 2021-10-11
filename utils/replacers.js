@@ -22,6 +22,7 @@ export const replaceValuesInSpecials = (target, data) => {
 export const conditionalsReplacer = (data) => {
   return (target, value) => {
     value = findObjectValue(value, data);
+    console.log(value)
     if (value === "true") {
       return replaceValuesInSpecials(target, data);
     }

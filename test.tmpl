@@ -6,14 +6,16 @@
     {{ #if val.options.isActive }}
     <div>
       Conditional block
+      {{ #if test.msg === "Some message" }}
       <div>{{ test.msg }}</div>
+      {{ #fi }}
       <div>{{ asd }}</div>
       <div>{{ qwerty }}</div>
     </div>
     {{ #fi }}
   </div>
   {{ #rof }}
-  {{ #if show.test.1.2.3 }}
+  {{ #if true }}
   <div>
     Conditional block
     <div>{{ test.msg }}</div>

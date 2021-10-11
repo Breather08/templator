@@ -1,6 +1,9 @@
 export const findObjectValue = (objString, data) => {
   let temp = { ...data };
   let value = "";
+  if (!objString.includes(".")) {
+    return objString;
+  }
   objString.split(".").forEach((item) => {
     value = temp[item];
     if (value instanceof Object) {
@@ -12,6 +15,6 @@ export const findObjectValue = (objString, data) => {
 
 export const isNumberString = (value) => /^\d+$/.test(value);
 
-export const handleConditionals = (value) => {
+export const handleConditionalStrings = (value) => {
   return value !== "false" && value;
-}
+};

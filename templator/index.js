@@ -46,7 +46,7 @@ export class Templator {
           range.forEach((item) => {
             obj[iterable] = item;
             const block = target
-              .replace(conditionalsRegex, conditionalsReplacer(data))
+              .replace(conditionalsRegex, conditionalsReplacer({...data, ...obj}))
               .replace(specialBracketsRegex, "");
             rangeString += `${replaceValuesInSpecials(block, obj)}\n`;
           });
